@@ -13,17 +13,24 @@
 
 void flush(void);
 
-unsigned long long factorial(unsigned int n)
-{
-	if(n == 0)
-		return 1;
-	return n * factorial(n-1);
-}
 
+void reverse()
+{
+	char c;
+	scanf("%c", &c);
+	if(c != '\n')
+	{
+		reverse();
+		printf("%c", c);
+	}
+
+}
 int main(void)
 {
+	printf("Enter a sentence: ");
+	flush();
+	reverse();
 
-	printf("%ld", fac(5));
 	return EXIT_SUCCESS;
 }
 

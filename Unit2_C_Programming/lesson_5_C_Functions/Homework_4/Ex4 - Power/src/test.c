@@ -13,17 +13,28 @@
 
 void flush(void);
 
-unsigned long long factorial(unsigned int n)
+long long int power(int base, unsigned int pow)
 {
-	if(n == 0)
+	if(pow == 0)
 		return 1;
-	return n * factorial(n-1);
+	return base * power(base, pow-1);
 }
 
 int main(void)
 {
+	int base;
+	printf("Enter base number: ");
+	flush();
+	scanf("%d", &base);
 
-	printf("%ld", fac(5));
+
+	unsigned int pow;
+	printf("Enter power number(positive integer) : ");
+	flush();
+	scanf("%u", &pow);
+
+	printf("%d^%u = %lld", base, pow, power(base, pow));
+	flush();
 	return EXIT_SUCCESS;
 }
 

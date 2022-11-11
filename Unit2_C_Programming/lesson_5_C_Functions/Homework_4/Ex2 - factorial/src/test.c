@@ -13,7 +13,7 @@
 
 void flush(void);
 
-unsigned long long factorial(unsigned int n)
+unsigned long long int factorial(unsigned int n)
 {
 	if(n == 0)
 		return 1;
@@ -22,8 +22,12 @@ unsigned long long factorial(unsigned int n)
 
 int main(void)
 {
-
-	printf("%ld", fac(5));
+	unsigned int n;
+	printf("Enter a positive integer: ");
+	flush();
+	scanf("%u", &n);
+	printf("factorial of %u = %lu", n, factorial(n) );
+	flush();
 	return EXIT_SUCCESS;
 }
 
