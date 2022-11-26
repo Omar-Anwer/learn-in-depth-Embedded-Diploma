@@ -16,7 +16,7 @@ void flush(void);
 int main(void) {
 
 	int trials = 2;
-	int n;
+	unsigned int n;
 
 	while(trials--)
 	{
@@ -24,8 +24,8 @@ int main(void) {
 		flush();
 		scanf("%d", &n);
 
-		long sum = (n+1)*(n>>1);
-		printf("Sum = %lld\n", sum);
+		unsigned long sum = n*(n+1)>>1;
+		printf("Sum = %llu\n", sum);
 		flush();
 	}
 
