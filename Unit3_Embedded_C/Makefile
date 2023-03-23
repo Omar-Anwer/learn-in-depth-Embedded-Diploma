@@ -1,7 +1,7 @@
-#@copyright : Omar Anwer
+#@copyright : Omar	
 Project_Name = learn-in-depth-cortex-m4
 CC = arm-none-eabi-
-CFLAGS = -ansi -std=c89 -O0 -Wall -mcpu=cortex-m4 -g -gdwarf-2 
+CFLAGS = -mcpu=cortex-m4 -g -gdwarf-2
 INCS = -I .
 LIBS =
 SRC = $(wildcard *.c)
@@ -10,9 +10,6 @@ As = $(wildcard *.s)
 AsOBJ = $(As:.s=.o)
 
 all: $(Project_Name).bin
-	@$(CC)size.exe $(Project_Name).elf
-	@echo ""
-	@echo ""
 	@echo "Building done..."
 	
 %.o: %.s
@@ -23,9 +20,6 @@ all: $(Project_Name).bin
 
 $(Project_Name).elf: $(AsOBJ) $(OBJ)
 	$(CC)ld.exe -T linker_script.ld $(LIBS) $(AsOBJ) $(OBJ) -o $@ -Map=output.map
-	$(CC)objdump.exe -h $@
-	@echo ""
-	$(CC)readelf.exe -S $@
 	@cp $(Project_Name).elf $(Project_Name).axf
 	
 $(Project_Name).bin: $(Project_Name).elf
@@ -33,8 +27,8 @@ $(Project_Name).bin: $(Project_Name).elf
 	$(CC)objcopy.exe -O ihex $< $(Project_Name).hex
 	
 clean:
-	@rm *.bin *.hex *.elf *.axf *.map
+	@rm *.bin *.hex *.elf *.axf
 	
 clean-all:
-	@rm *.o *.bin *.hex *.elf *.axf *.map
+	@rm *.o *.bin *.hex *.elf *.axf
 	@echo "All cleaned..."
