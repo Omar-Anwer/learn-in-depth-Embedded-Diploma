@@ -1,34 +1,72 @@
-#@copyright : Omar	
-Project_Name = learn-in-depth-cortex-m4
-CC = arm-none-eabi-
-CFLAGS = -mcpu=cortex-m4 -g -gdwarf-2
-INCS = -I .
-LIBS =
-SRC = $(wildcard *.c)
-OBJ = $(SRC:.c=.o)
-As = $(wildcard *.s)
-AsOBJ = $(As:.s=.o)
+#@copyright : Omar Anwer
 
-all: $(Project_Name).bin
+#Project name
+PROJECT_NAME	= learn-in-depth-cortex-m4
+
+#Architectures Specific Flags
+CPU 			= cortex-m4
+CFLAGS_ARCH 	= -mcpu=$(CPU)
+#CFLAGS_ARCH    = -mcpu=$(CPU) -m$(ARCH) --specs=$(SPECS)
+
+#Compiler Flags and Defines
+CC				= arm-none-eabi-
+DBGCFLAGS		= -g -gdwarf-2
+CFLAGS			= -ansi -std=c89 -O0 -Wall -Wextra $(CFLAGS_ARCH) $(DBGCFLAGS)
+
+#Linker Flags
+LINKER_FILE		= linker_script.ld
+LDFLAGS_ARCH 	= -T $(LINKER_FILE)
+
+#includes
+INCS			= -I .
+LIBS			=
+
+#.c and .s files 
+SRC				= $(wildcard *.c)
+AS				= $(wildcard *.s)
+
+#.o files
+SRCOBJ			= $(SRC:.c=.o)
+ASOBJ			= $(As:.s=.o)
+PRE				= $(SRC:.c=.i)
+
+
+all: $(PROJECT_NAME).bin
+	@echo ""
+	@$(CC)size.exe $(PROJECT_NAME).elf
+	@echo ""
 	@echo "Building done..."
 	
 %.o: %.s
-	$(CC)as.exe $(CFLAGS) $< -o $@
+	$(CC)as.exe $(CFLAGS) $(INCS) $< -o $@
+	@echo ""
 	
+%.i: %.c
+	$(CC)gcc.exe -E $(INCS) $< -o $@
+	@echo ""
+
 %.o: %.c
 	$(CC)gcc.exe -c $(CFLAGS) $(INCS) $< -o $@
-
-$(Project_Name).elf: $(AsOBJ) $(OBJ)
-	$(CC)ld.exe -T linker_script.ld $(LIBS) $(AsOBJ) $(OBJ) -o $@ -Map=output.map
-	@cp $(Project_Name).elf $(Project_Name).axf
+	@echo ""
 	
-$(Project_Name).bin: $(Project_Name).elf
+$(PROJECT_NAME).elf: $(ASOBJ) $(SRCOBJ) $(PRE)
+	$(CC)ld.exe $(LDFLAGS_ARCH) $(LIBS) $(ASOBJ) $(SRCOBJ) -o $@ -Map=$(PROJECT_NAME).map
+	@echo ""
+	$(CC)objdump.exe -h $@
+	@echo ""
+	$(CC)readelf.exe -S $@
+	@echo ""
+	@cp $(PROJECT_NAME).elf $(PROJECT_NAME).axf
+	
+$(PROJECT_NAME).bin: $(PROJECT_NAME).elf
 	$(CC)objcopy.exe -O binary $< $@
-	$(CC)objcopy.exe -O ihex $< $(Project_Name).hex
+	@echo ""
+	$(CC)objcopy.exe -O ihex $< $(PROJECT_NAME).hex
+	@echo ""
 	
 clean:
-	@rm *.bin *.hex *.elf *.axf
+	@rm *.bin *.hex *.elf *.axf *.i *.map 
 	
 clean-all:
-	@rm *.o *.bin *.hex *.elf *.axf
+	@rm *.o *.bin *.hex *.elf *.axf *.i  *.map
 	@echo "All cleaned..."
