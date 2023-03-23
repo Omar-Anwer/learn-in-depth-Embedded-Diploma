@@ -46,6 +46,8 @@ all: $(PROJECT_NAME).bin
 	@echo ""
 
 %.o: %.c
+	$(CC)gcc.exe -S  $(INCS) $<
+	@echo ""
 	$(CC)gcc.exe -c $(CFLAGS) $(INCS) $< -o $@
 	@echo ""
 	
@@ -65,8 +67,8 @@ $(PROJECT_NAME).bin: $(PROJECT_NAME).elf
 	@echo ""
 	
 clean:
-	@rm *.bin *.hex *.elf *.axf *.i *.map 
+	@rm *.bin *.hex *.elf *.axf *.map 
 	
 clean-all:
-	@rm *.o *.bin *.hex *.elf *.axf *.i  *.map
+	@rm *.i *.s *.o *.bin *.hex *.elf *.axf *.map
 	@echo "All cleaned..."
