@@ -1,4 +1,4 @@
-#@copyright : Omar Anwer
+#@copyright : Omar	
 Project_Name = learn-in-depth-cortex-m4
 CC = arm-none-eabi-
 CFLAGS = -ansi -std=c89 -O0 -Wall -mcpu=cortex-m4 -g -gdwarf-2 
