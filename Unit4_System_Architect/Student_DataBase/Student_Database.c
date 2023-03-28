@@ -225,6 +225,4 @@ void GetNthStudent(void)
    {
      DPRINTF("No student was found!!\n");
    }
-
-
 }

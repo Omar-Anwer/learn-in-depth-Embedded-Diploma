@@ -10,6 +10,19 @@
 #ifndef STUDENT_DATABASE_H_
 #define STUDENT_DATABASE_H_
 
+void AddStudent(void);
+
+int DeleteStudent(void);
+
+void ViewStudents(void);
+
+void DeleteAll(void);
+
+unsigned int NumStudents(void);
+
+void GetStudent(void);
+
+void GetNthStudent(void);
 
 
 

@@ -13,8 +13,8 @@
 #include <conio.h>
 #include <string.h>
 
-#include "Student_Database.h"
 
+#include "Student_Database.h"
 
 
 #define DPRINTF(...)  {fflush(stdout); \
@@ -34,9 +34,9 @@ int main(void)
     DPRINTF("2 - Delete a student\n");
     DPRINTF("3 - View all students\n");
     DPRINTF("4 - Delete all students\n");
-    DPRINTF("5 - Get number of students\n");
-    DPRINTF("6 - Get a student info\n");
-    DPRINTF("7 - Get nth student info\n");
+    DPRINTF("6 - Get student ID info\n");
+    DPRINTF("5 - Get nth student info\n");
+    DPRINTF("7 - Get number of students\n");
     DPRINTF("Enter option number: ");
     gets(txt);
     DPRINTF("\n ======================\n");
@@ -56,13 +56,13 @@ int main(void)
         DeleteAll();
         break;
       case 5:
-        NumStudents();
+        GetNthStudent();
         break;
       case 6:
         GetStudent();
         break;
       case 7:
-        GetNthStudent();
+        NumStudents();
         break;
       default:
         DPRINTF("Wrong option!\n");
