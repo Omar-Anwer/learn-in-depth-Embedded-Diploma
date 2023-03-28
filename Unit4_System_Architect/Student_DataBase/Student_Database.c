@@ -14,10 +14,10 @@
 #include <string.h>
 
 #define DPRINTF(...)  {fflush(stdout); \
-                       fflush(stdin); \
-                       printf(__VA_ARGS__); \
-                       fflush(stdout); \
-                       fflush(stdin);}
+    fflush(stdin); \
+    printf(__VA_ARGS__); \
+    fflush(stdout); \
+    fflush(stdin);}
 typedef struct
 {
     unsigned int ID;
@@ -28,7 +28,7 @@ typedef struct
 
 typedef struct SStudent SStudent;
 
- struct SStudent
+struct SStudent
 {
     Sdata student;
     SStudent* pNextStudent;
@@ -36,12 +36,12 @@ typedef struct SStudent SStudent;
 
 
 
-SStudent* gpFirstStudent = 0;
+SStudent* gpFirstStudent = NULL;
 
 void AddStudent(void)
 {
   SStudent* pNewStudent = (SStudent*)malloc(sizeof(SStudent));
-  if(gpFirstStudent == 0)
+  if(gpFirstStudent == NULL)
   {
     gpFirstStudent = pNewStudent;
   }
@@ -68,7 +68,7 @@ void AddStudent(void)
   gets(txt);
   pNewStudent->student.height = atof(txt);
 
-  pNewStudent->pNextStudent = 0;
+  pNewStudent->pNextStudent = NULL;
 }
 
 int DeleteStudent(void)
@@ -79,13 +79,13 @@ int DeleteStudent(void)
   gets(txt);
   ID = atoi(txt);
 
-  if(gpFirstStudent != 0)
+  if(gpFirstStudent)
   {
+    SStudent* pPreviousStudent = NULL;
     SStudent* pSelectedStudent = gpFirstStudent;
-    SStudent* pPreviousStudent = 0;
-    while(pSelectedStudent != 0)
+    while(pSelectedStudent)
     {
-      if(pPreviousStudent->student.ID == ID)
+      if(pSelectedStudent->student.ID == ID)
       {
         if(pPreviousStudent)
         {
@@ -101,9 +101,9 @@ int DeleteStudent(void)
       pPreviousStudent = pSelectedStudent;
       pSelectedStudent = pSelectedStudent->pNextStudent;
     }
-    DPRINTF("\nCan't find the student id!!\n");
-    return 0;
+
   }
+  DPRINTF("\nCan't find the student id!!\n");
   return 0;
 }
 
@@ -111,7 +111,7 @@ void ViewStudents(void)
 {
   SStudent* pCurrentStudent = gpFirstStudent;
   unsigned int cnt = 0;
-  if(gpFirstStudent == 0)
+  if(gpFirstStudent == NULL)
   {
     DPRINTF("Empty list!!\n");
   }
@@ -132,7 +132,7 @@ void ViewStudents(void)
 void DeleteAll(void)
 {
   SStudent* pCurrentStudent = gpFirstStudent;
-  if(gpFirstStudent == 0)
+  if(gpFirstStudent == NULL)
   {
     DPRINTF("Empty list!!\n");
   }
@@ -144,6 +144,87 @@ void DeleteAll(void)
       pCurrentStudent = pCurrentStudent->pNextStudent;
       free(pTempStudent);
     }
-    gpFirstStudent = 0;
+    gpFirstStudent = NULL;
   }
+}
+
+unsigned int NumStudents(void)
+{
+  unsigned int num = 0;
+  SStudent* pCurrentStudent = gpFirstStudent;
+  while(pCurrentStudent)
+  {
+    pCurrentStudent = pCurrentStudent->pNextStudent;
+    num++;
+  }
+  DPRINTF("Number of students = %u\n", num);
+  return num;
+}
+
+void GetStudent(void)
+{
+  char txt[40];
+  unsigned int ID;
+  DPRINTF("\n Enter the student ID to display his/her info: ");
+  gets(txt);
+  ID = atoi(txt);
+
+  unsigned int cnt = 0;
+  unsigned int isFound = 0;
+  SStudent* pCurrentStudent = gpFirstStudent;
+  while(pCurrentStudent)
+  {
+    if(pCurrentStudent->student.ID == ID)
+    {
+      isFound = 1;
+      break;
+    }
+    pCurrentStudent = pCurrentStudent->pNextStudent;
+  }
+  if(isFound)
+  {
+    DPRINTF("record number %u\n", cnt + 1);
+    DPRINTF("ID:  %d\n", pCurrentStudent->student.ID);
+    DPRINTF("name:  %s\n", pCurrentStudent->student.name);
+    DPRINTF("height:  %f\n", pCurrentStudent->student.height);
+  }
+  else
+  {
+    DPRINTF("No student was found!!\n");
+  }
+}
+
+void GetNthStudent(void)
+{
+  char txt[40];
+    unsigned int n;
+    DPRINTF("\n Enter the nth student to display his/her info: ");
+    gets(txt);
+    n = atoi(txt);
+
+  unsigned int isFound = 0;
+  int i = 1;
+  SStudent* pCurrentStudent = gpFirstStudent;
+  while(pCurrentStudent){
+    if(i == n){
+      isFound = 1;
+      break;
+    }
+    pCurrentStudent = pCurrentStudent->pNextStudent;
+    i++;
+  }
+
+  if(isFound)
+   {
+     DPRINTF("record number %u\n", i);
+     DPRINTF("ID:  %d\n", pCurrentStudent->student.ID);
+     DPRINTF("name:  %s\n", pCurrentStudent->student.name);
+     DPRINTF("height:  %f\n", pCurrentStudent->student.height);
+   }
+   else
+   {
+     DPRINTF("No student was found!!\n");
+   }
+
+
 }

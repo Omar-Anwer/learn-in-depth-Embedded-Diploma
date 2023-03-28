@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : Data.c
+ Name        : main.c
  Author      : Omar Anwer
  Version     :
  Copyright   : Your copyright notice
@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
-
 
 #include "Student_Database.h"
 
@@ -35,6 +34,9 @@ int main(void)
     DPRINTF("2 - Delete a student\n");
     DPRINTF("3 - View all students\n");
     DPRINTF("4 - Delete all students\n");
+    DPRINTF("5 - Get number of students\n");
+    DPRINTF("6 - Get a student info\n");
+    DPRINTF("7 - Get nth student info\n");
     DPRINTF("Enter option number: ");
     gets(txt);
     DPRINTF("\n ======================\n");
@@ -53,10 +55,20 @@ int main(void)
       case 4:
         DeleteAll();
         break;
+      case 5:
+        NumStudents();
+        break;
+      case 6:
+        GetStudent();
+        break;
+      case 7:
+        GetNthStudent();
+        break;
       default:
-        DPRINTF("Wrong option !\n");
+        DPRINTF("Wrong option!\n");
         break;
     }
   }
+
   return 0;
 }
