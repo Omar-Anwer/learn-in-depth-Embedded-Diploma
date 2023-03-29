@@ -34,8 +34,8 @@ int main(void)
     DPRINTF("2 - Delete a student\n");
     DPRINTF("3 - View all students\n");
     DPRINTF("4 - Delete all students\n");
-    DPRINTF("6 - Get student ID info\n");
     DPRINTF("5 - Get nth student info\n");
+    DPRINTF("6 - Get student ID info\n");
     DPRINTF("7 - Get number of students\n");
     DPRINTF("Enter option number: ");
     gets(txt);
