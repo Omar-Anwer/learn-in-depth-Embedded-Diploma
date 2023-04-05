@@ -5,6 +5,8 @@
 # 10 "Alarm.c"
 # 1 "Alarm.h" 1
 # 14 "Alarm.h"
+# 1 "state.h" 1
+# 15 "Alarm.h" 2
 # 1 "driver.h" 1
 
 
@@ -1370,44 +1372,69 @@ _putchar_unlocked(int _c)
 # 24 "driver.h"
 
 # 24 "driver.h"
-void Delay(int nCount);
+void Delay(unsigned int nCount);
 void GPIO_INITIALIZATION();
-# 15 "Alarm.h" 2
-
-
-
-
-
-
 void Set_Alarm_actuator(int i);
+int getPressureVal(void);
+# 16 "Alarm.h" 2
+
 void Alarm_Init(void);
 void StartAlarm(void);
 void StopAlarm(void);
+
+
+extern void (*ALARM_STATE) ();
+
+void ST_ALARM_OFF();
+void ST_ALARM_ON();
+void ST_ALARM_WAITING();
 # 11 "Alarm.c" 2
+
+
+
+void (*ALARM_STATE) (void);
+
+
+enum
+{
+  ALARM_OFF,
+  ALARM_ON,
+  ALARM_WAITING
+}ALARM_STATE_ID;
+
+void ST_ALARM_WAITING()
+{
+  ALARM_STATE_ID = ALARM_WAITING;
+}
+
+void ST_ALARM_ON()
+{
+  ALARM_STATE_ID = ALARM_ON;
+  Set_Alarm_actuator(ALARM_ON);
+  ALARM_STATE = ST_ALARM_WAITING;
+}
+
+void ST_ALARM_OFF()
+{
+  ALARM_STATE_ID = ALARM_OFF;
+  Set_Alarm_actuator(ALARM_OFF);
+  ALARM_STATE = ST_ALARM_WAITING;
+}
 
 void Alarm_Init(void)
 {
-  StopAlarm();
+  Set_Alarm_actuator(ALARM_OFF);
 }
 
-void Set_Alarm_actuator(int i)
-{
-  if (i == 1)
-  {
-    *(volatile uint32_t *)(0x40010800 + 0x0C) |= (1<<13);
-  }
-  else if (i == 0)
-  {
-    *(volatile uint32_t *)(0x40010800 + 0x0C) &= ~(1<<13);
-  }
-}
 
 void StartAlarm(void)
 {
-  Set_Alarm_actuator((0U));
+  ALARM_STATE = ST_ALARM_ON;
+  ALARM_STATE();
 }
 
 void StopAlarm(void)
 {
-  Set_Alarm_actuator((1U));
+  ALARM_STATE = ST_ALARM_OFF;
+  ALARM_STATE();
 }

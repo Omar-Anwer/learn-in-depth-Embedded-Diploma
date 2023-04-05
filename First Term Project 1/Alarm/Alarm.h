@@ -8,20 +8,23 @@
  * 
  */
 
-#ifndef _ALARM_H_
-#define _ALARM_H_
+#ifndef ALARM_H_
+#define ALARM_H_
 
+#include "state.h"
 #include "driver.h"
 
-#define ALARM_ON                (0U)
-#define ALARM_OFF               (1U)
-#define ONE_SECOND_DELAY        (500000U)
-#define ALARM_TIME_PERIOD       (ONE_SECOND_DELAY  * 60)
-
-void Set_Alarm_actuator(int i);
 void Alarm_Init(void);
 void StartAlarm(void);
 void StopAlarm(void);
+
+/* State pointer to functions */
+extern void (*ALARM_STATE) ();
+
+STATE_DEFINE(ALARM_OFF);
+STATE_DEFINE(ALARM_ON);
+STATE_DEFINE(ALARM_WAITING);
+
 
 
 #endif

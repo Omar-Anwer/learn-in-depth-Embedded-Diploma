@@ -9,29 +9,51 @@
  */
 #include "Alarm.h"
 
-void Alarm_Init(void)
+
+/* state ptr to function*/
+void (*ALARM_STATE) (void);
+
+/* define states */
+enum
 {
-  StopAlarm();
+  ALARM_OFF,
+  ALARM_ON,
+  ALARM_WAITING
+}ALARM_STATE_ID;
+
+STATE_DEFINE(ALARM_WAITING)
+{
+  ALARM_STATE_ID = ALARM_WAITING;
 }
 
-void Set_Alarm_actuator(int i)
+STATE_DEFINE(ALARM_ON)
 {
-  if (i == 1)
-  {
-    SET_BIT(GPIOA_ODR,13);
-  }
-  else if (i == 0)
-  {
-    RESET_BIT(GPIOA_ODR,13);
-  }
+  ALARM_STATE_ID = ALARM_ON;
+  Set_Alarm_actuator(ALARM_ON);
+  ALARM_STATE = STATE(ALARM_WAITING);
 }
+
+STATE_DEFINE(ALARM_OFF)
+{
+  ALARM_STATE_ID = ALARM_OFF;
+  Set_Alarm_actuator(ALARM_OFF);
+  ALARM_STATE = STATE(ALARM_WAITING);
+}
+
+void Alarm_Init(void)
+{
+  Set_Alarm_actuator(ALARM_OFF);
+}
+
 
 void StartAlarm(void)
 {
-  Set_Alarm_actuator(ALARM_ON);
+  ALARM_STATE = STATE(ALARM_ON);
+  ALARM_STATE();
 }
 
 void StopAlarm(void)
 {
-  Set_Alarm_actuator(ALARM_OFF);
+  ALARM_STATE = STATE(ALARM_OFF);
+  ALARM_STATE();
 }
