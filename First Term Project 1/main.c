@@ -11,36 +11,25 @@
 #include "driver.h"
 #include "Alarm.h"
 #include "Pressure_Sensor.h"
-
-
-extern int g_pressureVal;
+#include "App.h"
 
 
 int main(void)
 {
   GPIO_INITIALIZATION();
+
   PressureSensor_Init();
   Alarm_Init();
 
+  ALARM_STATE = STATE(ALARM_WAITING);
+  PS_STATE = STATE(PS_READING);
+  PRESSURE_DETECTION_STATE = STATE(PRESSURE_DETECTION);
 
   while (1)
   {
-    /* getPressureVal */
-    getPressureVal();
-
-    /* storePressureVal (optional) */
-
-    /* Monitor Alarm */
-    if(g_pressureVal > PRESSURE_THRESHOLD)
-    {
-      StartAlarm();
-      Delay(ALARM_TIME_PERIOD);
-      StopAlarm();
-    }
-    else
-    {
-      /**/
-    }
+    PS_STATE();
+    PRESSURE_DETECTION_STATE();
+    ALARM_STATE();
   }
 
   return 0;

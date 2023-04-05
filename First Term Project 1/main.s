@@ -26,21 +26,37 @@ main:
 	bl	GPIO_INITIALIZATION
 	bl	PressureSensor_Init
 	bl	Alarm_Init
-.L3:
-	bl	getPressureVal
-	ldr	r3, .L4
+	ldr	r3, .L3
+	ldr	r2, .L3+4
+	str	r2, [r3]
+	ldr	r3, .L3+8
+	ldr	r2, .L3+12
+	str	r2, [r3]
+	ldr	r3, .L3+16
+	ldr	r2, .L3+20
+	str	r2, [r3]
+.L2:
+	ldr	r3, .L3+8
 	ldr	r3, [r3]
-	cmp	r3, #20
-	bls	.L3
-	bl	StartAlarm
-	ldr	r0, .L4+4
-	bl	Delay
-	bl	StopAlarm
-	b	.L3
-.L5:
-	.align	2
+	mov	lr, pc
+	bx	r3
+	ldr	r3, .L3+16
+	ldr	r3, [r3]
+	mov	lr, pc
+	bx	r3
+	ldr	r3, .L3
+	ldr	r3, [r3]
+	mov	lr, pc
+	bx	r3
+	b	.L2
 .L4:
-	.word	g_pressureVal
-	.word	30000000
+	.align	2
+.L3:
+	.word	ALARM_STATE
+	.word	ST_ALARM_WAITING
+	.word	PS_STATE
+	.word	ST_PS_READING
+	.word	PRESSURE_DETECTION_STATE
+	.word	ST_PRESSURE_DETECTION
 	.size	main, .-main
 	.ident	"GCC: (GNU Arm Embedded Toolchain 10.3-2021.10) 10.3.1 20210824 (release)"

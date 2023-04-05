@@ -1368,51 +1368,62 @@ _putchar_unlocked(int _c)
 # 24 "driver.h"
 
 # 24 "driver.h"
-void Delay(int nCount);
+void Delay(unsigned int nCount);
 void GPIO_INITIALIZATION();
+void Set_Alarm_actuator(int i);
+int getPressureVal(void);
 # 12 "main.c" 2
 # 1 "Alarm.h" 1
-# 21 "Alarm.h"
-void Set_Alarm_actuator(int i);
+# 14 "Alarm.h"
+# 1 "state.h" 1
+# 15 "Alarm.h" 2
+
+
 void Alarm_Init(void);
 void StartAlarm(void);
 void StopAlarm(void);
+
+
+extern void (*ALARM_STATE) ();
+
+void ST_ALARM_OFF();
+void ST_ALARM_ON();
+void ST_ALARM_WAITING();
 # 13 "main.c" 2
 # 1 "Pressure_Sensor.h" 1
-# 16 "Pressure_Sensor.h"
+# 17 "Pressure_Sensor.h"
 void PressureSensor_Init(void);
-void getPressureVal(void);
+
+
+
+extern void (*PS_STATE) ();
+
+void ST_PS_READING();
 # 14 "main.c" 2
+# 1 "App.h" 1
+# 21 "App.h"
+extern void (*PRESSURE_DETECTION_STATE) ();
 
-
-extern int g_pressureVal;
+void ST_PRESSURE_DETECTION();
+# 15 "main.c" 2
 
 
 int main(void)
 {
   GPIO_INITIALIZATION();
+
   PressureSensor_Init();
   Alarm_Init();
 
+  ALARM_STATE = ST_ALARM_WAITING;
+  PS_STATE = ST_PS_READING;
+  PRESSURE_DETECTION_STATE = ST_PRESSURE_DETECTION;
 
   while (1)
   {
-
-    getPressureVal();
-
-
-
-
-    if(g_pressureVal > (20U))
-    {
-      StartAlarm();
-      Delay(((500000U) * 60));
-      StopAlarm();
-    }
-    else
-    {
-
-    }
+    PS_STATE();
+    PRESSURE_DETECTION_STATE();
+    ALARM_STATE();
   }
 
   return 0;
