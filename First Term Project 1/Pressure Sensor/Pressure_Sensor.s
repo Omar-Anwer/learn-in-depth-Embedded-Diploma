@@ -12,14 +12,6 @@
 	.eabi_attribute 18, 4
 	.file	"Pressure_Sensor.c"
 	.text
-	.global	g_pressureVal
-	.bss
-	.align	2
-	.type	g_pressureVal, %object
-	.size	g_pressureVal, 4
-g_pressureVal:
-	.space	4
-	.text
 	.align	2
 	.global	PressureSensor_Init
 	.syntax unified
@@ -32,45 +24,52 @@ PressureSensor_Init:
 	@ link register save eliminated.
 	str	fp, [sp, #-4]!
 	add	fp, sp, #0
-	ldr	r3, .L2
-	mov	r2, #0
-	str	r2, [r3]
 	nop
 	add	sp, fp, #0
 	@ sp needed
 	ldr	fp, [sp], #4
 	bx	lr
-.L3:
-	.align	2
-.L2:
-	.word	g_pressureVal
 	.size	PressureSensor_Init, .-PressureSensor_Init
+	.global	PS_STATE
+	.bss
 	.align	2
-	.global	getPressureVal
+	.type	PS_STATE, %object
+	.size	PS_STATE, 4
+PS_STATE:
+	.space	4
+	.global	PS_STATE_ID
+	.type	PS_STATE_ID, %object
+	.size	PS_STATE_ID, 1
+PS_STATE_ID:
+	.space	1
+	.text
+	.align	2
+	.global	ST_PS_READING
 	.syntax unified
 	.arm
-	.type	getPressureVal, %function
-getPressureVal:
+	.type	ST_PS_READING, %function
+ST_PS_READING:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
-	@ link register save eliminated.
-	str	fp, [sp, #-4]!
-	add	fp, sp, #0
-	ldr	r3, .L5
-	ldr	r3, [r3]
-	and	r3, r3, #255
-	ldr	r2, .L5+4
+	push	{fp, lr}
+	add	fp, sp, #4
+	ldr	r3, .L3
+	mov	r2, #0
+	strb	r2, [r3]
+	bl	getPressureVal
+	mov	r3, r0
+	ldr	r2, .L3+4
 	str	r3, [r2]
 	nop
-	add	sp, fp, #0
+	sub	sp, fp, #4
 	@ sp needed
-	ldr	fp, [sp], #4
+	pop	{fp, lr}
 	bx	lr
-.L6:
+.L4:
 	.align	2
-.L5:
-	.word	1073809416
+.L3:
+	.word	PS_STATE_ID
 	.word	g_pressureVal
-	.size	getPressureVal, .-getPressureVal
+	.size	ST_PS_READING, .-ST_PS_READING
 	.ident	"GCC: (GNU Arm Embedded Toolchain 10.3-2021.10) 10.3.1 20210824 (release)"

@@ -7,19 +7,27 @@
  * Description:
  * 
  */
-
-#include "driver.h"
 #include "Pressure_Sensor.h"
 
-int g_pressureVal;
+extern int g_pressureVal;
 
 void PressureSensor_Init(void)
 {
-  g_pressureVal = 0;
+ /* Sensor Driver Init */
 }
 
+/* state ptr to function*/
+void (*PS_STATE) (void);
 
-void getPressureVal(void)
+/* define states */
+enum
 {
-  g_pressureVal  = (GPIOA_IDR & 0xFF);
+  PS_READING,
+}PS_STATE_ID;
+
+STATE_DEFINE(PS_READING)
+{
+  PS_STATE_ID = PS_READING;
+  g_pressureVal = getPressureVal();
 }
+

@@ -2,7 +2,11 @@
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "Pressure_Sensor.c"
-# 11 "Pressure_Sensor.c"
+# 10 "Pressure_Sensor.c"
+# 1 "Pressure_Sensor.h" 1
+# 13 "Pressure_Sensor.h"
+# 1 "state.h" 1
+# 14 "Pressure_Sensor.h" 2
 # 1 "driver.h" 1
 
 
@@ -1368,24 +1372,40 @@ _putchar_unlocked(int _c)
 # 24 "driver.h"
 
 # 24 "driver.h"
-void Delay(int nCount);
+void Delay(unsigned int nCount);
 void GPIO_INITIALIZATION();
-# 12 "Pressure_Sensor.c" 2
-# 1 "Pressure_Sensor.h" 1
-# 16 "Pressure_Sensor.h"
-void PressureSensor_Init(void);
-void getPressureVal(void);
-# 13 "Pressure_Sensor.c" 2
+void Set_Alarm_actuator(int i);
+int getPressureVal(void);
+# 15 "Pressure_Sensor.h" 2
 
-int g_pressureVal;
+
+void PressureSensor_Init(void);
+
+
+
+extern void (*PS_STATE) ();
+
+void ST_PS_READING();
+# 11 "Pressure_Sensor.c" 2
+
+extern int g_pressureVal;
 
 void PressureSensor_Init(void)
 {
-  g_pressureVal = 0;
+
 }
 
 
-void getPressureVal(void)
+void (*PS_STATE) (void);
+
+
+enum
 {
-  g_pressureVal = (*(volatile uint32_t *)(0x40010800 + 0x08) & 0xFF);
+  PS_READING,
+}PS_STATE_ID;
+
+void ST_PS_READING()
+{
+  PS_STATE_ID = PS_READING;
+  g_pressureVal = getPressureVal();
 }
