@@ -1,5 +1,5 @@
-#ifndef _DRIVER_H_
-#define _DRIVER_H_
+#ifndef DRIVER_H_
+#define DRIVER_H_
 
 #include <stdint.h>
 #include <stdio.h>
@@ -21,7 +21,10 @@
 #define GPIOA_ODR *(volatile uint32_t *)(GPIO_PORTA + 0x0C)
 
 
-void Delay(int nCount);
+void Delay(unsigned int nCount);
 void GPIO_INITIALIZATION();
+void Set_Alarm_actuator(int i);
+int getPressureVal(void);
 
-#endif /* _DRIVER_H_ */
+
+#endif /* DRIVER_H_ */

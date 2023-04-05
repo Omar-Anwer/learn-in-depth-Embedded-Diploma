@@ -1367,11 +1367,13 @@ _putchar_unlocked(int _c)
 # 24 "driver.h"
 
 # 24 "driver.h"
-void Delay(int nCount);
+void Delay(unsigned int nCount);
 void GPIO_INITIALIZATION();
+void Set_Alarm_actuator(int i);
+int getPressureVal(void);
 # 2 "driver.c" 2
 
-void Delay(int nCount)
+void Delay(unsigned int nCount)
 {
  for(; nCount != 0; nCount--);
 }
@@ -1382,4 +1384,21 @@ void GPIO_INITIALIZATION (){
  *(volatile uint32_t *)(0x40010800 + 0x00) |= 0x00000000;
  *(volatile uint32_t *)(0x40010800 + 0X04) &= 0xFF0FFFFF;
  *(volatile uint32_t *)(0x40010800 + 0X04) |= 0x22222222;
+}
+
+void Set_Alarm_actuator(int i)
+{
+  if (i)
+  {
+    *(volatile uint32_t *)(0x40010800 + 0x0C) &= ~(1<<13);
+  }
+  else
+  {
+    *(volatile uint32_t *)(0x40010800 + 0x0C) |= (1<<13);
+  }
+}
+
+int getPressureVal(void)
+{
+  return (*(volatile uint32_t *)(0x40010800 + 0x08) & 0xFF);
 }
