@@ -49,7 +49,8 @@ int main(void)
   List_popBack(&list, &tmp);
   printf("poped back: %d\n", tmp);
   List_Print(&list);
-
+ 
+  /********************************************************************/
 
   LIFO_t Uart_LIFO;
   LIFO_Init(&Uart_LIFO, LIFO_Buffer, LIFO_BUFFER_MAX_SIZE);
